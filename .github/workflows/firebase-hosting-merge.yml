@@ -18,3 +18,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RUBAN_PORTFOLIO }}
           channelId: live
           projectId: ruban-portfolio
+          target: main  # <--- ADD THIS LINE
