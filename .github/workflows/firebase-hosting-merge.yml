@@ -13,10 +13,12 @@ jobs:
           node-version: '18'
           cache: 'npm'
       - run: npm ci && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RUBAN_PORTFOLIO }}
-          channelId: live
-          projectId: ruban-portfolio
-          
+      
+      - name: Create service account key file
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RUBAN_PORTFOLIO }}' > $HOME/gcloud-key.json
+      
+      - name: Deploy to Firebase
+        run: |
+          npm install -g firebase-tools
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-key.json
+          firebase deploy --only hosting --project ruban-portfolio --non-interactive
