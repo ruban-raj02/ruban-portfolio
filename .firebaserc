@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "ruban-portfolio"
-  }
+  },
+  "targets": {
+    "ruban-portfolio": {
+      "hosting": {
+        "main": [
+          "ruban-portfolio"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
