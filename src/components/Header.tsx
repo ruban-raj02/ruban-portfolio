@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Music, Pause } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [
@@ -11,10 +11,15 @@ const navLinks = [
   { name: "Contact", href: "#contact" },
 ];
 
+// Music track
+const musicUrl = "https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3";
+
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,8 +51,22 @@ export const Header = () => {
     }
   };
 
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.volume = 0.65;
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   return (
     <>
+      <audio ref={audioRef} src={musicUrl} loop />
+      
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -93,11 +112,27 @@ export const Header = () => {
                 {link.name}
               </motion.a>
             ))}
+            <motion.button
+              onClick={toggleMusic}
+              className="p-2"
+              whileTap={{ scale: 0.95 }}
+              aria-label="Toggle music"
+            >
+              {isPlaying ? <Pause size={20} /> : <Music size={20} />}
+            </motion.button>
             <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            <motion.button
+              onClick={toggleMusic}
+              className="p-2"
+              whileTap={{ scale: 0.95 }}
+              aria-label="Toggle music"
+            >
+              {isPlaying ? <Pause size={20} /> : <Music size={20} />}
+            </motion.button>
             <ThemeToggle />
             <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
